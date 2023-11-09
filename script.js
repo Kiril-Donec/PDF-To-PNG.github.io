@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1;
     let isRendering = false;
 
+    const enableDownloadButtons = () => {
+        downloadAllButton.disabled = false;
+        downloadSelectedButton.disabled = false;
+    };
+
     const renderPage = async (pageNumber) => {
         if (!pdf || isRendering) return;
         isRendering = true;
@@ -44,8 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         pdfNavButtons.style.display = 'flex';
         statusMessage.textContent = `Конвертація 1 з ${pdf.numPages}`;
-        downloadAllButton.disabled = true;
-        downloadSelectedButton.disabled = true;
+        enableDownloadButtons();
 
         // Preload all pages to improve performance
         for (let i = 1; i <= pdf.numPages; i++) {
