@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageInput = document.getElementById('pageInput');
     const pdfPreview = document.getElementById('pdfPreview');
     const pageSelection = document.getElementById('pageSelection');
-
     let pdf = null;
 
     pdfInput.addEventListener('change', async (e) => {
@@ -14,26 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
 
-        // Додайте код для відображення першої сторінки PDF у pdfPreview
         const firstPage = await pdf.getPage(1);
         const scale = 1.5;
         const viewport = firstPage.getViewport({ scale });
-
         const canvas = document.createElement('canvas');
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-
         const context = canvas.getContext('2d');
         const renderContext = {
             canvasContext: context,
             viewport: viewport
         };
-
         await firstPage.render(renderContext).promise;
         pdfPreview.innerHTML = '';
         pdfPreview.appendChild(canvas);
 
-        // Додайте код для відображення кількості сторінок у pageSelection
         const numPages = pdf.numPages;
         const pagesLabel = document.createElement('label');
         pagesLabel.textContent = `Виберіть сторінки для завантаження (1-${numPages}):`;
@@ -61,6 +55,34 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Додайте код для конвертації вибраних сторінок у зображення PNG
+        const zip = new JSZip();
+        const folder = zip.folder('images');
+
+        for (let i = startPage; i <= endPage; i++) {
+            const page = await pdf.getPage(i);
+            const scale = 1.5;
+            const viewport = page.getViewport({ scale });
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            await page.render(renderContext).promise;
+            const imgData = canvas.toDataURL('image/png');
+            const imgName = `page_${i}.png`;
+            folder.file(imgName, imgData.split('base64,')[1], { base64: true });
+        }
+
+        zip.generateAsync({ type: 'blob' })
+            .then((blob) => {
+                const zipUrl = URL.createObjectURL(blob);
+                const zipLink = document.createElement('a');
+                zipLink.href = zipUrl;
+                zipLink.download = 'images.zip';
+                zipLink.click();
+            });
     });
 });
