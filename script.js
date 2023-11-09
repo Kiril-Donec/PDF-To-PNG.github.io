@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const enableDownloadButtons = () => {
         downloadAllButton.disabled = false;
         downloadSelectedButton.disabled = false;
+        console.log ('Привет от JavaScript!')
     };
 
     const renderPage = async (pageNumber) => {
