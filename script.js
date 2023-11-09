@@ -16,13 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const enableDownloadButtons = () => {
         downloadAllButton.disabled = false;
         downloadSelectedButton.disabled = false;
-        console.log ('Привет от JavaScript!')
+    };
+
+    const scrollToStatus = () => {
+        window.scrollTo(0, statusMessage.offsetTop);
     };
 
     const renderPage = async (pageNumber) => {
         if (!pdf || isRendering) return;
         isRendering = true;
         statusMessage.textContent = 'Завантаження';
+        scrollToStatus();
         const page = await pdf.getPage(pageNumber);
         const scale = 1;
         const viewport = page.getViewport({ scale });
@@ -50,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         pdfNavButtons.style.display = 'flex';
         statusMessage.textContent = `Конвертація 1 з ${pdf.numPages}`;
+        scrollToStatus();
         enableDownloadButtons();
 
         // Preload all pages to improve performance
@@ -78,6 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        window.scrollTo(0, 0);
+        statusMessage.textContent = 'Архівування 1 з 4'; // Замініть 4 на відповідне число сторінок
+        scrollToStatus();
+
         const zip = new JSZip();
         const folder = zip.folder('images');
 
@@ -99,7 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
             folder.file(imgName, imgData.split('base64,')[1], { base64: true });
         }
 
-        statusMessage.textContent = `Архівування 1 з ${pdf.numPages}`;
+        statusMessage.textContent = 'Завантаження';
+        scrollToStatus();
 
         zip.generateAsync({ type: 'blob' })
             .then((blob) => {
@@ -109,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 zipLink.download = 'images.zip';
                 zipLink.click();
                 statusMessage.textContent = 'Завантаження';
+                scrollToStatus();
             });
     });
 
@@ -118,32 +129,85 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const pagesToDownload = pageInput.value.split(',');
+        const pagesToDownloadInput = pageInput.value.trim();
+        const pageRanges = pagesToDownloadInput.split(',');
         const zip = new JSZip();
         const folder = zip.folder('images');
+        const totalPageCount = pdf.numPages;
 
-        for (const pageToDownload of pagesToDownload) {
-            const pageNumber = parseInt(pageToDownload);
-            if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= pdf.numPages) {
-                const page = await pdf.getPage(pageNumber);
-                const scale = 1;
-                const viewport = page.getViewport({ scale });
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                const renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                await page.render(renderContext).promise;
-                const imgData = canvas.toDataURL('image/png');
-                const imgName = `page_${pageNumber}.png`;
-                folder.file(imgName, imgData.split('base64,')[1], { base64: true });
+        let processedPages = 0;
+        let totalPagesToConvert = 0;
+
+        for (const pageRange of pageRanges) {
+            const rangeParts = pageRange.trim().split('-');
+            if (rangeParts.length === 1) {
+                const pageNumber = parseInt(rangeParts[0]);
+                if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPageCount) {
+                    totalPagesToConvert++;
+                }
+            } else if (rangeParts.length === 2) {
+                const startPage = parseInt(rangeParts[0]);
+                const endPage = parseInt(rangeParts[1]);
+                if (!isNaN(startPage) && !isNaN(endPage) && startPage <= endPage && startPage >= 1 && endPage <= totalPageCount) {
+                    totalPagesToConvert += endPage - startPage + 1;
+                }
             }
         }
 
-        statusMessage.textContent = `Архівування 1 з ${pagesToDownload.length}`;
+        for (const pageRange of pageRanges) {
+            const rangeParts = pageRange.trim().split('-');
+            if (rangeParts.length === 1) {
+                const pageNumber = parseInt(rangeParts[0]);
+                if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPageCount) {
+                    const page = await pdf.getPage(pageNumber);
+                    const scale = 1;
+                    const viewport = page.getViewport({ scale });
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    await page.render(renderContext).promise;
+                    const imgData = canvas.toDataURL('image/png');
+                    const imgName = `page_${pageNumber}.png`;
+                    folder.file(imgName, imgData.split('base64,')[1], { base64: true });
+                    processedPages++;
+                    statusMessage.textContent = `Архівування ${processedPages} з ${totalPagesToConvert}`;
+                    scrollToStatus();
+                }
+            } else if (rangeParts.length === 2) {
+                const startPage = parseInt(rangeParts[0]);
+                const endPage = parseInt(rangeParts[1]);
+                if (!isNaN(startPage) && !isNaN(endPage) && startPage <= endPage && startPage >= 1 && endPage <= totalPageCount) {
+                    for (let i = startPage; i <= endPage; i++) {
+                        const page = await pdf.getPage(i);
+                        const scale = 1;
+                        const viewport = page.getViewport({ scale });
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        const renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        await page.render(renderContext).promise;
+                        const imgData = canvas.toDataURL('image/png');
+                        const imgName = `page_${i}.png`;
+                        folder.file(imgName, imgData.split('base64,')[1], { base64: true });
+                        processedPages++;
+                        statusMessage.textContent = `Архівування ${processedPages} з ${totalPagesToConvert}`;
+                        scrollToStatus();
+                    }
+                }
+            }
+        }
+
+        statusMessage.textContent = 'Завантаження';
+        scrollToStatus();
 
         zip.generateAsync({ type: 'blob' })
             .then((blob) => {
@@ -153,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 zipLink.download = 'selected_images.zip';
                 zipLink.click();
                 statusMessage.textContent = 'Завантаження';
+                scrollToStatus();
             });
     });
 });
