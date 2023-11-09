@@ -4,7 +4,7 @@
     <title>PDF to PNG Converter</title>
     <style>
         .pdf-nav-button {
-            font-size: 24px;
+            font-size: 36px;
             cursor: pointer;
         }
         #pdfContainer {
@@ -24,12 +24,16 @@
             align-items: center;
         }
         #pdfPageInfo {
+            font-size: 24px;
             margin-top: 10px;
         }
         #pdfNavButtons {
             display: flex;
             justify-content: space-between;
             width: 100%;
+        }
+        #pdfNavButtons, #pdfPageInfo {
+            display: none;
         }
     </style>
 </head>
@@ -39,10 +43,10 @@
         <div id="pdfViewer">
             <div id="pdfNavButtons" style="width: 100%;">
                 <div id="pdfPrevPage" class="pdf-nav-button">⬅️</div>
+                <div id="pdfPageInfo">Сторінка 1 з 1</div>
                 <div id="pdfNextPage" class="pdf-nav-button">➡️</div>
             </div>
             <canvas id="pdfCanvas"></canvas>
-            <div id="pdfPageInfo">Оберіть файл</div>
         </div>
         <div id="pdfControls">
             <input type="file" id="pdfInput" accept=".pdf">
