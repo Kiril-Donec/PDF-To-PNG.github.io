@@ -3,9 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadAllButton = document.getElementById('downloadAll');
     const downloadSelectedButton = document.getElementById('downloadSelected');
     const pageInput = document.getElementById('pageInput');
-    const pdfPreview = document.getElementById('pdfPreview');
-    const pageInfo = document.getElementById('pageInfo');
+    const pdfContainer = document.getElementById('pdfContainer');
+    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfPrevPage = document.getElementById('pdfPrevPage');
+    const pdfNextPage = document.getElementById('pdfNextPage');
+    const pdfPageCounter = document.getElementById('pdfPageCounter');
+    const pdfCanvas = document.getElementById('pdfCanvas');
     let pdf = null;
+    let currentPage = 1;
 
     pdfInput.addEventListener('change', async (e) => {
         const pdfFile = e.target.files[0];
@@ -13,25 +18,26 @@ document.addEventListener('DOMContentLoaded', () => {
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
 
         pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
-
-        const firstPage = await pdf.getPage(1);
-        const scale = 1.5;
-        const viewport = firstPage.getViewport({ scale });
-        const canvas = document.createElement('canvas');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        const context = canvas.getContext('2d');
-        const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-        };
-        await firstPage.render(renderContext).promise;
-        pdfPreview.innerHTML = '';
-        pdfPreview.appendChild(canvas);
-
-        const numPages = pdf.numPages;
-        pageInfo.textContent = `Сторінка 1 з ${numPages}`;
+        renderPage(currentPage);
     });
+
+    async function renderPage(pageNumber) {
+        if (!pdf) return;
+
+        const page = await pdf.getPage(pageNumber);
+        const scale = 0.5; // Зменшуємо масштаб до 50%
+        const viewport = page.getViewport({ scale });
+        pdfCanvas.width = viewport.width;
+        pdfCanvas.height = viewport.height;
+        const canvasContext = pdfCanvas.getContext('2d');
+        const renderContext = {
+            canvasContext,
+            viewport,
+        };
+        await page.render(renderContext).promise;
+        pdfPageCounter.textContent = `Сторінка ${pageNumber} з ${pdf.numPages}`;
+        currentPage = pageNumber;
+    }
 
     downloadAllButton.addEventListener('click', async () => {
         if (!pdf) {
@@ -44,30 +50,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
-            const scale = 1.5;
+            const scale = 0.5; // Зменшуємо масштаб до 50%
             const viewport = page.getViewport({ scale });
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+            pdfCanvas.width = viewport.width;
+            pdfCanvas.height = viewport.height;
+            const canvasContext = pdfCanvas.getContext('2d');
             const renderContext = {
-                canvasContext: context,
-                viewport: viewport
+                canvasContext,
+                viewport,
             };
             await page.render(renderContext).promise;
-            const imgData = canvas.toDataURL('image/png');
+            const imgData = pdfCanvas.toDataURL('image/png');
             const imgName = `page_${i}.png`;
             folder.file(imgName, imgData.split('base64,')[1], { base64: true });
         }
 
-        zip.generateAsync({ type: 'blob' })
-            .then((blob) => {
-                const zipUrl = URL.createObjectURL(blob);
-                const zipLink = document.createElement('a');
-                zipLink.href = zipUrl;
-                zipLink.download = 'images.zip';
-                zipLink.click();
-            });
+        zip.generateAsync({ type: 'blob' }).then((blob) => {
+            const zipUrl = URL.createObjectURL(blob);
+            const zipLink = document.createElement('a');
+            zipLink.href = zipUrl;
+            zipLink.download = 'images.zip';
+            zipLink.click();
+        });
     });
 
     downloadSelectedButton.addEventListener('click', async () => {
@@ -89,29 +93,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const pageNumber of pagesToDownload) {
             const page = await pdf.getPage(pageNumber);
-            const scale = 1.5;
+            const scale = 0.5; // Зменшуємо масштаб до 50%
             const viewport = page.getViewport({ scale });
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+            pdfCanvas.width = viewport.width;
+            pdfCanvas.height = viewport.height;
+            const canvasContext = pdfCanvas.getContext('2d');
             const renderContext = {
-                canvasContext: context,
-                viewport: viewport
+                canvasContext,
+                viewport,
             };
             await page.render(renderContext).promise;
-            const imgData = canvas.toDataURL('image/png');
+            const imgData = pdfCanvas.toDataURL('image/png');
             const imgName = `page_${pageNumber}.png`;
             folder.file(imgName, imgData.split('base64,')[1], { base64: true });
         }
 
-        zip.generateAsync({ type: 'blob' })
-            .then((blob) => {
-                const zipUrl = URL.createObjectURL(blob);
-                const zipLink = document.createElement('a');
-                zipLink.href = zipUrl;
-                zipLink.download = 'images.zip';
-                zipLink.click();
-            });
+        zip.generateAsync({ type: 'blob' }).then((blob) => {
+            const zipUrl = URL.createObjectURL(blob);
+            const zipLink = document.createElement('a');
+            zipLink.href = zipUrl;
+            zipLink.download = 'images.zip';
+            zipLink.click();
+        });
+    });
+
+    pdfPrevPage.addEventListener('click', () => {
+        if (currentPage > 1) {
+            renderPage(currentPage - 1);
+        }
+    });
+
+    pdfNextPage.addEventListener('click', () => {
+        if (currentPage < pdf.numPages) {
+            renderPage(currentPage + 1);
+        }
     });
 });
