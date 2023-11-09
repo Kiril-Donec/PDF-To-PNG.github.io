@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pdfCanvas = document.getElementById('pdfCanvas');
     let pdf = null;
     let currentPage = 1;
+    const scale = 1.0; // Зміний масштаб
 
     pdfInput.addEventListener('change', async (e) => {
         const pdfFile = e.target.files[0];
@@ -25,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!pdf) return;
 
         const page = await pdf.getPage(pageNumber);
-        const scale = 0.5; // Зменшуємо масштаб до 50%
         const viewport = page.getViewport({ scale });
         pdfCanvas.width = viewport.width;
         pdfCanvas.height = viewport.height;
@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
-            const scale = 1.5; // Масштаб для зображення
             const viewport = page.getViewport({ scale });
             const canvas = document.createElement('canvas');
             canvas.width = viewport.width;
@@ -105,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             const page = await pdf.getPage(pageNumber);
-            const scale = 1.5; // Масштаб для зображення
             const viewport = page.getViewport({ scale });
             const canvas = document.createElement('canvas');
             canvas.width = viewport.width;
