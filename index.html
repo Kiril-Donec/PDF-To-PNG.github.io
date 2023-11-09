@@ -3,40 +3,32 @@
 <head>
     <title>PDF to PNG Converter</title>
     <style>
-        #pdfViewer {
-            position: relative;
+        .pdf-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
-
-        #pdfPrevPage,
-        #pdfNextPage {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 24px;
+        .pdf-canvas {
+            max-width: 80%;
+            max-height: 80vh;
+        }
+        .pdf-nav-button {
+            margin: 10px;
             cursor: pointer;
-        }
-
-        #pdfPrevPage {
-            left: 10px;
-        }
-
-        #pdfNextPage {
-            right: 10px;
-        }
-
-        #pdfCanvas {
-            max-width: 100%;
-            height: auto;
+            font-size: 24px;
         }
     </style>
 </head>
 <body>
     <h1>PDF to PNG Converter</h1>
-    <div id="pdfContainer">
+    <div class="pdf-container">
         <div id="pdfViewer">
-            <div id="pdfPrevPage" class="pdf-nav-button" onclick="goToPage('prev')">&#9664;</div>
-            <div id="pdfNextPage" class="pdf-nav-button" onclick="goToPage('next')">&#9654;</div>
-            <canvas id="pdfCanvas"></canvas>
+            <div id="pdfPrevPage" class="pdf-nav-button">&#9664;</div>
+            <div id="pdfCanvasContainer">
+                <canvas id="pdfCanvas" class="pdf-canvas"></canvas>
+            </div>
+            <div id="pdfNextPage" class="pdf-nav-button">&#9654;</div>
         </div>
         <div id="pdfControls">
             <input type="file" id="pdfInput" accept=".pdf">
