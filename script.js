@@ -8,11 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const pdfNextPage = document.getElementById('pdfNextPage');
     const pdfPageInfo = document.getElementById('pdfPageInfo');
     const pdfNavButtons = document.getElementById('pdfNavButtons');
+    const statusMessage = document.getElementById('statusMessage');
     let pdf = null;
     let currentPage = 1;
+    let isRendering = false;
 
     const renderPage = async (pageNumber) => {
-        if (!pdf) return;
+        if (!pdf || isRendering) return;
+        isRendering = true;
+        statusMessage.textContent = 'Завантаження';
         const page = await pdf.getPage(pageNumber);
         const scale = 1;
         const viewport = page.getViewport({ scale });
@@ -27,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         await page.render(renderContext).promise;
         pdfPageInfo.textContent = `Сторінка ${pageNumber} з ${pdf.numPages}`;
         currentPage = pageNumber;
+        isRendering = false;
+        statusMessage.textContent = '';
     };
 
     pdfInput.addEventListener('change', async (e) => {
@@ -36,9 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
 
-        renderPage(1);
-
         pdfNavButtons.style.display = 'flex';
+        statusMessage.textContent = `Конвертація 1 з ${pdf.numPages}`;
+        downloadAllButton.disabled = true;
+        downloadSelectedButton.disabled = true;
+
+        // Preload all pages to improve performance
+        for (let i = 1; i <= pdf.numPages; i++) {
+            await pdf.getPage(i);
+        }
+
+        renderPage(1);
     });
 
     pdfPrevPage.addEventListener('click', () => {
@@ -80,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
             folder.file(imgName, imgData.split('base64,')[1], { base64: true });
         }
 
+        statusMessage.textContent = `Архівування 1 з ${pdf.numPages}`;
+
         zip.generateAsync({ type: 'blob' })
             .then((blob) => {
                 const zipUrl = URL.createObjectURL(blob);
@@ -87,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 zipLink.href = zipUrl;
                 zipLink.download = 'images.zip';
                 zipLink.click();
+                statusMessage.textContent = 'Завантаження';
             });
     });
 
@@ -121,6 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        statusMessage.textContent = `Архівування 1 з ${pagesToDownload.length}`;
+
         zip.generateAsync({ type: 'blob' })
             .then((blob) => {
                 const zipUrl = URL.createObjectURL(blob);
@@ -128,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 zipLink.href = zipUrl;
                 zipLink.download = 'selected_images.zip';
                 zipLink.click();
+                statusMessage.textContent = 'Завантаження';
             });
     });
 });
