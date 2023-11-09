@@ -24,28 +24,29 @@
             align-items: center;
             margin-top: 20px;
         }
+        #statusMessage {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
         #pdfPageInfo {
-            margin-top: 10px;
             font-size: 18px;
         }
         #pdfNavButtons {
             display: flex;
             align-items: center;
         }
-        #statusMessage {
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
     <h1>PDF to PNG Converter</h1>
     <div id="pdfContainer">
+        <div id="statusMessage"></div>
         <div id="pdfViewer">
             <canvas id="pdfCanvas"></canvas>
             <div id="pdfNavButtons" class="pdf-nav-button">
                 <div id="pdfPrevPage" class="pdf-nav-button">⬅️</div>
                 <div id="pdfPageInfo"></div>
-                <div id="pdfNextPage" class="pdf-nav-button">➡️</div>
+                <div id="pdfNextPage" class "pdf-nav-button">➡️</div>
             </div>
         </div>
         <div id="pdfControls">
@@ -56,7 +57,6 @@
                 <label for="pageInput">Виберіть сторінки для завантаження (розділіть комами):</label>
                 <input type="text" id="pageInput">
             </div>
-            <div id="statusMessage"></div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.js"></script>
