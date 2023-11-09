@@ -7,35 +7,45 @@
             font-size: 24px;
             cursor: pointer;
         }
-        .pdf-container {
+        #pdfContainer {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .pdf-controls {
-            display: flex;
-            align-items: center;
-            margin: 10px;
-        }
-        .pdf-interface {
+        #pdfViewer {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        #pdfControls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #pdfPageInfo {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        #pdfNavButtons {
+            display: flex;
             align-items: center;
         }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">PDF to PNG Converter</h1>
-    <div class="pdf-container">
-        <div class="pdf-interface">
-            <canvas id="pdfCanvas"></canvas>
-            <div id="pdfNavButtons" style="display: flex;">
+    <h1>PDF to PNG Converter</h1>
+    <div id="pdfContainer">
+        <div id="pdfViewer">
+            <div id="pdfNavButtons" class="pdf-nav-button">
                 <div id="pdfPrevPage" class="pdf-nav-button">⬅️</div>
-                <div id="pdfPageInfo">Сторінка 1 з 1</div>
+                <div id="pdfPageInfo"></div>
                 <div id="pdfNextPage" class="pdf-nav-button">➡️</div>
             </div>
+            <canvas id="pdfCanvas"></canvas>
         </div>
-        <div class="pdf-controls">
+        <div id="pdfControls">
             <input type="file" id="pdfInput" accept=".pdf">
             <button id="downloadAll">Завантажити всі</button>
             <button id="downloadSelected">Завантажити (обрані)</button>
