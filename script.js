@@ -3,15 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadAllButton = document.getElementById('downloadAll');
     const downloadSelectedButton = document.getElementById('downloadSelected');
     const pageInput = document.getElementById('pageInput');
-    const pdfContainer = document.getElementById('pdfContainer');
-    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfCanvas = document.getElementById('pdfCanvas');
     const pdfPrevPage = document.getElementById('pdfPrevPage');
     const pdfNextPage = document.getElementById('pdfNextPage');
-    const pdfPageCounter = document.getElementById('pdfPageCounter');
-    const pdfCanvas = document.getElementById('pdfCanvas');
+    const pdfPageInfo = document.getElementById('pdfPageInfo');
+    const pdfNavButtons = document.getElementById('pdfNavButtons');
     let pdf = null;
     let currentPage = 1;
-    const scale = 1.0; // Зміний масштаб
 
     pdfInput.addEventListener('change', async (e) => {
         const pdfFile = e.target.files[0];
@@ -19,35 +17,23 @@ document.addEventListener('DOMContentLoaded', () => {
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
 
         pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
+        pdfNavButtons.style.display = 'flex';
+        updatePageInfo();
+
         renderPage(currentPage);
     });
 
-    async function renderPage(pageNumber) {
-        if (!pdf) return;
-
-        const page = await pdf.getPage(pageNumber);
-        const viewport = page.getViewport({ scale });
-        pdfCanvas.width = viewport.width;
-        pdfCanvas.height = viewport.height;
-        const canvasContext = pdfCanvas.getContext('2d');
-        const renderContext = {
-            canvasContext,
-            viewport,
-        };
-        await page.render(renderContext).promise;
-        pdfPageCounter.textContent = `Сторінка ${pageNumber} з ${pdf.numPages}`;
-        currentPage = pageNumber;
-    }
-
     pdfPrevPage.addEventListener('click', () => {
         if (currentPage > 1) {
-            renderPage(currentPage - 1);
+            currentPage--;
+            renderPage(currentPage);
         }
     });
 
     pdfNextPage.addEventListener('click', () => {
         if (currentPage < pdf.numPages) {
-            renderPage(currentPage + 1);
+            currentPage++;
+            renderPage(currentPage);
         }
     });
 
@@ -61,12 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const folder = zip.folder('images');
 
         for (let i = 1; i <= pdf.numPages; i++) {
+            renderPage(i); // Render the page before downloading
             const page = await pdf.getPage(i);
+            const scale = 1.5;
             const viewport = page.getViewport({ scale });
             const canvas = document.createElement('canvas');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
             const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
             const renderContext = {
                 canvasContext: context,
                 viewport: viewport
@@ -94,21 +82,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const pagesToDownload = pageInput.value.split(',');
+        const invalidPages = pagesToDownload.some((page) => {
+            const pageNumber = parseInt(page);
+            return isNaN(pageNumber) || pageNumber < 1 || pageNumber > pdf.numPages;
+        });
+
+        if (invalidPages) {
+            alert('Неправильний формат введення сторінок.');
+            return;
+        }
+
         const zip = new JSZip();
         const folder = zip.folder('images');
 
-        for (let i = 0; i < pagesToDownload.length; i++) {
-            const pageNumber = parseInt(pagesToDownload[i]);
-            if (isNaN(pageNumber) || pageNumber < 1 || pageNumber > pdf.numPages) {
-                alert('Неправильний номер сторінки: ' + pageNumber);
-                return;
-            }
+        for (const page of pagesToDownload) {
+            const pageNumber = parseInt(page);
+            renderPage(pageNumber); // Render the page before downloading
             const page = await pdf.getPage(pageNumber);
+            const scale = 1.5;
             const viewport = page.getViewport({ scale });
             const canvas = document.createElement('canvas');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
             const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
             const renderContext = {
                 canvasContext: context,
                 viewport: viewport
@@ -128,4 +124,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 zipLink.click();
             });
     });
+
+    function renderPage(pageNumber) {
+        pdf.getPage(pageNumber).then((page) => {
+            const scale = 1.5;
+            const viewport = page.getViewport({ scale });
+            pdfCanvas.height = viewport.height;
+            pdfCanvas.width = viewport.width;
+            const context = pdfCanvas.getContext('2d');
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            pdfPageInfo.textContent = `Сторінка ${pageNumber} з ${pdf.numPages}`;
+            page.render(renderContext).promise;
+        });
+    }
+
+    function updatePageInfo() {
+        pdfPageInfo.textContent = `Сторінка ${currentPage} з ${pdf.numPages}`;
+    }
 });
