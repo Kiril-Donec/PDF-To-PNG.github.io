@@ -76,11 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const pagesToDownload = pageInput.value.split(',').map(Number);
+        const pagesToDownload = pageInput.value.split(',').map(page => page.trim()).map(Number);
         const invalidPages = pagesToDownload.filter(page => isNaN(page) || page < 1 || page > pdf.numPages);
 
         if (invalidPages.length > 0) {
-            alert('Неправильний діапазон сторінок.');
+            alert('Неправильний формат введення сторінок.');
             return;
         }
 
