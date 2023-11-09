@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const downloadSelectedButton = document.getElementById('downloadSelected');
     const pageInput = document.getElementById('pageInput');
     const pdfCanvas = document.getElementById('pdfCanvas');
+    const pdfCanvasContainer = document.getElementById('pdfCanvasContainer');
     const pdfPrevPage = document.getElementById('pdfPrevPage');
     const pdfNextPage = document.getElementById('pdfNextPage');
     const pdfPageInfo = document.getElementById('pdfPageInfo');
-    const pdfNavButtons = document.getElementById('pdfNavButtons');
     let pdf = null;
     let currentPage = 1;
 
@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const context = canvas.getContext('2d');
         canvas.height = viewport.height;
         canvas.width = viewport.width;
+        pdfCanvasContainer.style.width = viewport.width + 'px';
+        pdfCanvasContainer.style.height = viewport.height + 'px';
         const renderContext = {
             canvasContext: context,
             viewport: viewport
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderPage(1);
 
-        pdfNavButtons.style.display = 'flex';
+        pdfCanvasContainer.style.display = 'block';
     });
 
     pdfPrevPage.addEventListener('click', () => {
@@ -126,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const zipUrl = URL.createObjectURL(blob);
                 const zipLink = document.createElement('a');
                 zipLink.href = zipUrl;
-                zipLink.download = 'selected_images.zip';
+                zipLink.download = 'images.zip';
                 zipLink.click();
             });
     });
