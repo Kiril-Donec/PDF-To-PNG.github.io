@@ -14,21 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
 
-        const firstPage = await pdf.getPage(1);
-        const scale = 1.5;
-        const viewport = firstPage.getViewport({ scale });
-        const canvas = document.createElement('canvas');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        const context = canvas.getContext('2d');
-        const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-        };
-        await firstPage.render(renderContext).promise;
-        pdfPreview.innerHTML = '';
-        pdfPreview.appendChild(canvas);
-
         const numPages = pdf.numPages;
         const pagesLabel = document.createElement('label');
         pagesLabel.textContent = `Виберіть сторінки для завантаження (1-${numPages}):`;
@@ -68,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadPages(startPage, endPage);
     });
 
-    function downloadPages(start, end) {
+    async function downloadPages(start, end) {
         const zip = new JSZip();
         const folder = zip.folder('images');
 
@@ -77,9 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const scale = 1.5;
             const viewport = page.getViewport({ scale });
             const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
             canvas.height = viewport.height;
             canvas.width = viewport.width;
+            const context = canvas.getContext('2d');
             const renderContext = {
                 canvasContext: context,
                 viewport: viewport
