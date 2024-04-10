@@ -55,14 +55,15 @@
             flex-direction: column;
             align-items: center;
             position: relative;
+            transition: height 0.3s ease-in-out;
         }
 
         #pdfControls {
             display: flex;
             flex-direction: row;
+            justify-content: space-between;
             align-items: center;
             margin-top: 20px;
-            justify-content: space-between;
             width: 100%;
         }
 
@@ -87,31 +88,26 @@
             background: linear-gradient(90deg, #007cf0, #00dfd8);
             color: white;
             cursor: pointer;
-            transition: background 0.3s ease-in-out;
+            transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
 
         button:hover {
-            background: linear-gradient(90deg, #00dfd8, #248ff3);
-        }
-
-        input[type="file"] {
-            padding: 10px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background 0.3s ease-in-out;
-        }
-
-        input[type="file"]:hover {
-            background: #f0f0f0;
+            background: linear-gradient(90deg, #00dfd8, #007cf0);
+            transform: scale(1.1);
         }
 
         #pageSelection {
             display: none;
         }
 
-        #downloadSelected {
-            display: none;
+        #pageInput[type="text"]:valid ~ #pageSelection {
+            display: block;
+        }
+
+        #pageInput {
+            border: none;
+            border-bottom: 1px solid #000;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -133,7 +129,7 @@
             <button id="downloadSelected" disabled>Скачать выбранные</button>
             <div id="pageSelection">
                 <label for="pageInput">Выберите страницы для загрузки (разделите запятыми, через тире):</label>
-                <input type="text" id="pageInput">
+                <input type="text" id="pageInput" pattern="\d+">
             </div>
         </div>
     </div>
