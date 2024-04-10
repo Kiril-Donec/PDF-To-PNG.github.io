@@ -18,11 +18,9 @@
             animation: fadeIn 2s ease-in-out;
         }
 
-        h1 {
-            font-size: 2em;
-            color: #007cf0;
-            text-align: center;
-            padding-bottom: 20px;
+        @keyframes fadeIn {
+            0% {opacity: 0;}
+            100% {opacity: 1;}
         }
 
         .pdf-nav-button {
@@ -30,7 +28,6 @@
             cursor: pointer;
             margin: 0 10px;
             transition: transform 0.3s ease-in-out;
-            opacity: 0;
         }
 
         .pdf-nav-button:hover {
@@ -62,7 +59,7 @@
 
         #pdfControls {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
             justify-content: space-between;
             width: 100%;
@@ -72,21 +69,32 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding-bottom: 20px;
         }
 
         #pageSelection {
             display: flex;
             flex-direction: column;
-            margin-top: 20px;
+            margin-left: 20px;
         }
 
         #downloadSelected {
             display: none;
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
+        }
+
+        #statusMessage {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #pdfPageInfo {
+            font-size: 18px;
+        }
+
+        #pdfNavButtons {
+            display: flex;
+            align-items: center;
         }
 
         button {
@@ -96,12 +104,11 @@
             background: linear-gradient(90deg, #007cf0, #00dfd8);
             color: white;
             cursor: pointer;
-            transition: background 0.5s ease-in-out, transform 0.3s ease-in-out;
+            transition: background 0.5s ease-in-out;
         }
 
         button:hover {
             background: linear-gradient(90deg, #00dfd8, #007cf0);
-            transform: scale(1.1);
         }
 
         input[type="file"] {
@@ -114,18 +121,6 @@
         }
 
         input[type="file"]:hover {
-            background: #e0e0e0;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            border: none;
-            border-radius: 50px;
-            transition: background 0.5s ease-in-out;
-            background: #f0f0f0;
-        }
-
-        input[type="text"]:hover {
             background: #e0e0e0;
         }
     </style>
@@ -170,19 +165,6 @@
                 setTimeout(function() {
                     downloadSelectedButton.style.display = 'none';
                 }, 500);
-            }
-        });
-
-        document.getElementById('pdfInput').addEventListener('change', function() {
-            var pdfNavButtons = document.getElementsByClassName('pdf-nav-button');
-            for (var i = 0; i < pdfNavButtons.length; i++) {
-                pdfNavButtons[i].style.opacity = '0';
-                pdfNavButtons[i].style.display = 'inline-block';
-                (function(index) {
-                    setTimeout(function() {
-                        pdfNavButtons[index].style.opacity = '1';
-                    }, 50);
-                })(i);
             }
         });
     </script>
