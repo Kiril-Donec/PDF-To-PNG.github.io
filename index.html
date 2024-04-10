@@ -18,9 +18,11 @@
             animation: fadeIn 2s ease-in-out;
         }
 
-        @keyframes fadeIn {
-            0% {opacity: 0;}
-            100% {opacity: 1;}
+        h1 {
+            font-size: 2em;
+            color: #007cf0;
+            text-align: center;
+            padding-bottom: 20px;
         }
 
         .pdf-nav-button {
@@ -55,30 +57,35 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-            transition: height 0.3s ease-in-out;
         }
 
         #pdfControls {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            margin-top: 20px;
+            justify-content: space-between;
             width: 100%;
         }
 
-        #statusMessage {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        #pdfPageInfo {
-            font-size: 18px;
-        }
-
-        #pdfNavButtons {
+        #fileAndDownload {
             display: flex;
+            flex-direction: row;
             align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding-bottom: 20px;
+        }
+
+        #pageSelection {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        #downloadSelected {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
         }
 
         button {
@@ -88,7 +95,7 @@
             background: linear-gradient(90deg, #007cf0, #00dfd8);
             color: white;
             cursor: pointer;
-            transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transition: background 0.5s ease-in-out, transform 0.3s ease-in-out;
         }
 
         button:hover {
@@ -96,18 +103,29 @@
             transform: scale(1.1);
         }
 
-        #pageSelection {
-            display: none;
-        }
-
-        #pageInput[type="text"]:valid ~ #pageSelection {
-            display: block;
-        }
-
-        #pageInput {
+        input[type="file"] {
+            padding: 10px;
             border: none;
-            border-bottom: 1px solid #000;
-            margin-top: 10px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.5s ease-in-out;
+            background: #f0f0f0;
+        }
+
+        input[type="file"]:hover {
+            background: #e0e0e0;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 50px;
+            transition: background 0.5s ease-in-out;
+            background: #f0f0f0;
+        }
+
+        input[type="text"]:hover {
+            background: #e0e0e0;
         }
     </style>
 </head>
@@ -124,17 +142,48 @@
             </div>
         </div>
         <div id="pdfControls">
-            <input type="file" id="pdfInput" accept=".pdf">
-            <button id="downloadAll" disabled>Скачать все</button>
-            <button id="downloadSelected" disabled>Скачать выбранные</button>
+            <div id="fileAndDownload">
+                <input type="file" id="pdfInput" accept=".pdf">
+                <button id="downloadAll" disabled>Скачать все</button>
+                <button id="downloadSelected" disabled>Скачать выбранные</button>
+            </div>
             <div id="pageSelection">
                 <label for="pageInput">Выберите страницы для загрузки (разделите запятыми, через тире):</label>
-                <input type="text" id="pageInput" pattern="\d+">
+                <input type="text" id="pageInput">
             </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // Ваш JavaScript код здесь...
+        document.getElementById('pageInput').addEventListener('input', function() {
+            var downloadSelectedButton = document.getElementById('downloadSelected');
+            if (this.value.trim() !== '') {
+                downloadSelectedButton.style.display = 'inline-block';
+                setTimeout(function() {
+                    downloadSelectedButton.style.opacity = '1';
+                }, 50);
+            } else {
+                downloadSelectedButton.style.opacity = '0';
+                setTimeout(function() {
+                    downloadSelectedButton.style.display = 'none';
+                }, 500);
+            }
+        });
+
+        document.getElementById('pdfInput').addEventListener('change', function() {
+            var pdfNavButtons = document.getElementsByClassName('pdf-nav-button');
+            for (var i = 0; i < pdfNavButtons.length; i++) {
+                pdfNavButtons[i].style.opacity = '0';
+                pdfNavButtons[i].style.display = 'inline-block';
+                (function(index) {
+                    setTimeout(function() {
+                        pdfNavButtons[index].style.opacity = '1';
+                    }, 50);
+                })(i);
+            }
+        });
+    </script>
 </body>
 </html>
