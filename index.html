@@ -1,44 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PDF to PNG Converter</title>
+    <title>Конвертер PDF в PNG</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {opacity: 0;}
+            100% {opacity: 1;}
+        }
+
         .pdf-nav-button {
             font-size: 24px;
             cursor: pointer;
+            margin: 0 10px;
+            transition: transform 0.3s ease-in-out;
         }
+
+        .pdf-nav-button:hover {
+            transform: scale(1.2);
+        }
+
         #pdfContainer {
             display: flex;
             flex-direction: column;
             align-items: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            animation: slideUp 2s ease-in-out;
         }
+
+        @keyframes slideUp {
+            0% {transform: translateY(100%);}
+            100% {transform: translateY(0);}
+        }
+
         #pdfViewer {
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
         }
+
         #pdfControls {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
             margin-top: 20px;
+            justify-content: space-between;
+            width: 100%;
         }
+
         #statusMessage {
             font-size: 18px;
             margin-bottom: 10px;
         }
+
         #pdfPageInfo {
             font-size: 18px;
         }
+
         #pdfNavButtons {
             display: flex;
             align-items: center;
         }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #007cf0, #00dfd8);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #00dfd8, #248ff3);
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        input[type="file"]:hover {
+            background: #f0f0f0;
+        }
+
+        #pageSelection {
+            display: none;
+        }
+
+        #downloadSelected {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1>PDF to PNG Converter</h1>
+    <h1>Конвертер PDF в PNG</h1>
     <div id="pdfContainer">
         <div id="statusMessage"></div>
         <div id="pdfViewer">
@@ -46,15 +124,15 @@
             <div id="pdfNavButtons" class="pdf-nav-button">
                 <div id="pdfPrevPage" class="pdf-nav-button">⬅️</div>
                 <div id="pdfPageInfo"></div>
-                <div id="pdfNextPage" class "pdf-nav-button">➡️</div>
+                <div id="pdfNextPage" class="pdf-nav-button">➡️</div>
             </div>
         </div>
         <div id="pdfControls">
             <input type="file" id="pdfInput" accept=".pdf">
-            <button id="downloadAll" disabled>Завантажити всі</button>
-            <button id="downloadSelected" disabled>Завантажити (обрані)</button>
+            <button id="downloadAll" disabled>Скачать все</button>
+            <button id="downloadSelected" disabled>Скачать выбранные</button>
             <div id="pageSelection">
-                <label for="pageInput">Виберіть сторінки для завантаження (розділіть комами, через тире):</label>
+                <label for="pageInput">Выберите страницы для загрузки (разделите запятыми, через тире):</label>
                 <input type="text" id="pageInput">
             </div>
         </div>
