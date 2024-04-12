@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+.pdf-nav-button {
+    font-size: 24px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.pdf-nav-button:hover {
+    transform: scale(1.2);
+}
+
+#pdfContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    animation: slideUp 2s ease-in-out;
+}
+
+@keyframes slideUp {
+    0% {transform: translateY(100%);}
+    100% {transform: translateY(0);}
+}
+
+#pdfViewer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+#pdfControls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#statusMessage {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#pdfPageInfo {
+    font-size: 18px;
+}
+
+#pdfNavButtons {
+    display: flex;
+    align-items: center;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #007cf0, #00dfd8);
+    background-size: 200% 100%;
+    color: white;
+    cursor: pointer;
+    transition: background 0.5s ease-in-out, background-position 0.5s ease-in-out;
+    animation: gradient 5s infinite;
+    animation-fill-mode: forwards;
+}
+
+@keyframes gradient {
+    0% {background-position: 100% 0%;}
+    50% {background-position: 0% 100%;}
+    100% {background-position: 100% 0%;}
+}
+
+button:hover {
+    animation: none;
+    background: linear-gradient(90deg, #00dfd8, #007cf0);
+}
+
+input[type="file"] {
+    padding: 10px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.5s ease-in-out;
+    background: #f0f0f0;
+}
+
+input[type="file"]:hover {
+    background: #e0e0e0;
+}
+
+#pageSelection {
+    display: block;
+    margin-top: 20px;
+}
+
+#downloadSelected {
+    display: none;
+}
+
+#pageInput {
+    padding: 10px;
+    border: none;
+    border-radius: 50px;
+    transition: background 0.5s ease-in-out;
+    background: #f0f0f0;
+}
+
+#pageInput:hover {
+    background: #e0e0e0;
+}
