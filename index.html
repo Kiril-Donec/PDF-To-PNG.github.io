@@ -1,132 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Конвертер PDF в PNG</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+    <title id="title">Конвертер PDF в PNG</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script>
+        // Объект с переводами
+        var translations = {
+            'en': {
+                'title': 'PDF to PNG Converter',
+                'h1-title': 'PDF to PNG Converter',
+                'downloadAll': 'Download All',
+                'downloadSelected': 'Download Selected',
+                'label-pageInput': 'Select pages to download (separate with commas, through dash):'
+            },
+            'ru': {
+                'title': 'Конвертер PDF в PNG',
+                'h1-title': 'Конвертер PDF в PNG',
+                'downloadAll': 'Скачать все',
+                'downloadSelected': 'Скачать выбранные',
+                'label-pageInput': 'Выберите страницы для загрузки (разделите запятыми, через тире):'
+                
+            },
+            'ua': {
+                'title': 'Конвертер PDF у PNG',
+                'h1-title': 'Конвертер PDF у PNG',
+                'downloadAll': 'Завантажити все',
+                'downloadSelected': 'Завантажити обрані',
+                'label-pageInput': 'Виберіть сторінки для завантаження (розділіть комами, через тире):'
+                
+            },
+            // Добавьте другие языки здесь
+        };
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            animation: fadeIn 2s ease-in-out;
+        // Автоматический выбор языка
+        var userLang = navigator.language || navigator.userLanguage;
+        var languageFirstTwo = userLang.substr(0,2); // Чтобы сохранить только первые 2 символа.
+
+        // Если язык пользователя не поддерживается, используйте английский как язык по умолчанию
+        if (!translations[languageFirstTwo]) {
+            languageFirstTwo = 'en';
         }
 
-        @keyframes fadeIn {
-            0% {opacity: 0;}
-            100% {opacity: 1;}
-        }
+        // Замените текст на странице на выбранный язык
+        document.title = translations[languageFirstTwo]['title'];
+        document.getElementById('h1-title').innerText = translations[languageFirstTwo]['h1-title'];
+        document.getElementById('downloadAll').innerText = translations[languageFirstTwo]['downloadAll'];
+        document.getElementById('downloadSelected').innerText = translations[languageFirstTwo]['downloadSelected'];
+        document.getElementById('label-pageInput').innerText = translations[languageFirstTwo]['label-pageInput'];
 
-        .pdf-nav-button {
-            font-size: 24px;
-            cursor: pointer;
-            margin: 0 10px;
-            transition: transform 0.3s ease-in-out;
-        }
+        // Проверка, выбран ли файл
+        document.getElementById('pdfInput').addEventListener('change', function() {
+            var isFileSelected = !!this.files.length;
+            document.getElementById('pdfCanvas').style.display = isFileSelected ? 'block' : 'none';
+            document.getElementById('pdfNavButtons').style.display = isFileSelected ? 'flex' : 'none';
+            document.getElementById('downloadAll').disabled = !isFileSelected;
+            document.getElementById('downloadSelected').disabled = !isFileSelected;
+            document.getElementById('pageSelection').style.display = isFileSelected ? 'block' : 'none';
+        });
 
-        .pdf-nav-button:hover {
-            transform: scale(1.2);
-        }
-
-        #pdfContainer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-            animation: slideUp 2s ease-in-out;
-        }
-
-        @keyframes slideUp {
-            0% {transform: translateY(100%);}
-            100% {transform: translateY(0);}
-        }
-
-        #pdfViewer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
-
-        #pdfControls {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        #fileAndDownload {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-        }
-
-        #pageSelection {
-            display: flex;
-            flex-direction: column;
-            margin-left: 20px;
-        }
-
-        #downloadSelected {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        #statusMessage {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        #pdfPageInfo {
-            font-size: 18px;
-        }
-
-        #pdfNavButtons {
-            display: flex;
-            align-items: center;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 50px;
-            background: linear-gradient(90deg, #007cf0, #00dfd8);
-            color: white;
-            cursor: pointer;
-            transition: background 0.5s ease-in-out;
-        }
-
-        button:hover {
-            background: linear-gradient(90deg, #00dfd8, #007cf0);
-        }
-
-        input[type="file"] {
-            padding: 10px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background 0.5s ease-in-out;
-            background: #f0f0f0;
-        }
-
-        input[type="file"]:hover {
-            background: #e0e0e0;
-        }
-    </style>
+        // Скрыть элементы при загрузке страницы
+        window.onload = function() {
+            document.getElementById('pdfCanvas').style.display = 'none';
+            document.getElementById('pdfNavButtons').style.display = 'none';
+            document.getElementById('downloadAll').disabled = true;
+            document.getElementById('downloadSelected').disabled = true;
+            document.getElementById('pageSelection').style.display = 'none';
+        };
+    </script>
 </head>
 <body>
-    <h1>Конвертер PDF в PNG</h1>
+    <h1 id="h1-title">Конвертер PDF в PNG</h1>
     <div id="pdfContainer">
         <div id="statusMessage"></div>
         <div id="pdfViewer">
@@ -138,35 +81,17 @@
             </div>
         </div>
         <div id="pdfControls">
-            <div id="fileAndDownload">
-                <input type="file" id="pdfInput" accept=".pdf">
-                <button id="downloadAll" disabled>Скачать все</button>
-                <button id="downloadSelected" disabled>Скачать выбранные</button>
-            </div>
+            <input type="file" id="pdfInput" accept=".pdf">
+            <button id="downloadAll" disabled>Скачать все</button>
+            <button id="downloadSelected" disabled>Скачать выбранные</button>
             <div id="pageSelection">
-                <label for="pageInput">Выберите страницы для загрузки (разделите запятыми, через тире):</label>
+                <label id="label-pageInput" for="pageInput">Выберите страницы для загрузки (разделите запятыми, через тире):</label>
                 <input type="text" id="pageInput">
             </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-    <script>
-        // Ваш JavaScript код здесь...
-        document.getElementById('pageInput').addEventListener('input', function() {
-            var downloadSelectedButton = document.getElementById('downloadSelected');
-            if (this.value.trim() !== '') {
-                downloadSelectedButton.style.display = 'inline-block';
-                setTimeout(function() {
-                    downloadSelectedButton.style.opacity = '1';
-                }, 50);
-            } else {
-                downloadSelectedButton.style.opacity = '0';
-                setTimeout(function() {
-                    downloadSelectedButton.style.display = 'none';
-                }, 500);
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
