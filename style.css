@@ -9,7 +9,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    overflow: hidden;
+    overflow: auto; /* Изменено на auto для прокрутки при необходимости */
     animation: fadeIn 2s ease-in-out;
 }
 
@@ -38,6 +38,8 @@ body {
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
     animation: slideUp 2s ease-in-out;
+    width: 80%; /* Добавлено для адаптивности */
+    max-width: 800px; /* Добавлено для адаптивности */
 }
 
 @keyframes slideUp {
@@ -50,6 +52,7 @@ body {
     flex-direction: column;
     align-items: center;
     position: relative;
+    width: 100%; /* Добавлено для адаптивности */
 }
 
 #pdfControls {
@@ -73,6 +76,8 @@ body {
 #pdfNavButtons {
     display: flex;
     align-items: center;
+    justify-content: center; /* Добавлено для адаптивности */
+    width: 100%; /* Добавлено для адаптивности */
 }
 
 button {
@@ -86,6 +91,8 @@ button {
     transition: background 0.5s ease-in-out, background-position 0.5s ease-in-out;
     animation: gradient 5s infinite;
     animation-fill-mode: forwards;
+    max-width: 200px; /* Добавлено для адаптивности */
+    width: auto; /* Добавлено для адаптивности */
 }
 
 @keyframes gradient {
@@ -106,6 +113,8 @@ input[type="file"] {
     cursor: pointer;
     transition: background 0.5s ease-in-out;
     background: #f0f0f0;
+    width: 100%; /* Добавлено для адаптивности */
+    max-width: 200px; /* Добавлено для адаптивности */
 }
 
 input[type="file"]:hover {
@@ -115,6 +124,7 @@ input[type="file"]:hover {
 #pageSelection {
     display: block;
     margin-top: 20px;
+    width: 100%; /* Добавлено для адаптивности */
 }
 
 #downloadSelected {
@@ -127,8 +137,19 @@ input[type="file"]:hover {
     border-radius: 50px;
     transition: background 0.5s ease-in-out;
     background: #f0f0f0;
+    width: 100%; /* Добавлено для адаптивности */
 }
 
 #pageInput:hover {
     background: #e0e0e0;
+}
+
+/* Медиазапрос для экранов с шириной меньше 600px */
+@media (max-width: 600px) {
+    #pdfContainer {
+        width: 90%; /* Задайте ширину контейнера */
+        flex-direction: column; /* Измените направление элементов на вертикальное */
+    }
+
+    /* Другие стили для мобильных устройств */
 }
