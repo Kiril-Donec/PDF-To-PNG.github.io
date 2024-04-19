@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
@@ -11,6 +10,8 @@ body {
     height: 100vh;
     overflow: auto; /* Изменено на auto для прокрутки при необходимости */
     animation: fadeIn 2s ease-in-out;
+    background-color: #f0f0f0; /* Изменено цвет фона */
+    transition: background-color 0.5s ease-in-out; /* Плавная анимация изменения фона */
 }
 
 @keyframes fadeIn {
@@ -40,6 +41,7 @@ body {
     animation: slideUp 2s ease-in-out;
     width: 80%; /* Добавлено для адаптивности */
     max-width: 800px; /* Добавлено для адаптивности */
+    transition: background-color 0.5s ease-in-out; /* Плавная анимация изменения фона */
 }
 
 @keyframes slideUp {
@@ -66,7 +68,9 @@ body {
 
 #statusMessage {
     font-size: 18px;
-    margin-bottom: 10px;
+    margin-top: 20px; /* Изменено для размещения ниже кнопок */
+    text-align: center; /* Добавлено для выравнивания по центру */
+    animation: fadeIn 2s ease-in-out; /* Анимация появления */
 }
 
 #pdfPageInfo {
@@ -89,10 +93,10 @@ button {
     color: white;
     cursor: pointer;
     transition: background 0.5s ease-in-out, background-position 0.5s ease-in-out;
-    animation: gradient 5s infinite;
-    animation-fill-mode: forwards;
     max-width: 200px; /* Добавлено для адаптивности */
     width: auto; /* Добавлено для адаптивности */
+    animation: gradient 5s infinite;
+    animation-fill-mode: forwards;
 }
 
 @keyframes gradient {
@@ -138,6 +142,7 @@ input[type="file"]:hover {
     transition: background 0.5s ease-in-out;
     background: #f0f0f0;
     width: 100%; /* Добавлено для адаптивности */
+    max-width: 200px; /* Добавлено для адаптивности */
 }
 
 #pageInput:hover {

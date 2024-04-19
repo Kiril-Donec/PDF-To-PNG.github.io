@@ -3,75 +3,10 @@
 <head>
     <title id="title">Конвертер PDF в PNG</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script>
-        // Объект с переводами
-        var translations = {
-            'en': {
-                'title': 'PDF to PNG Converter',
-                'h1-title': 'PDF to PNG Converter',
-                'downloadAll': 'Download All',
-                'downloadSelected': 'Download Selected',
-                'label-pageInput': 'Select pages to download (separate with commas, through dash):'
-            },
-            'ru': {
-                'title': 'Конвертер PDF в PNG',
-                'h1-title': 'Конвертер PDF в PNG',
-                'downloadAll': 'Скачать все',
-                'downloadSelected': 'Скачать выбранные',
-                'label-pageInput': 'Выберите страницы для загрузки (разделите запятыми, через тире):'
-                
-            },
-            'ua': {
-                'title': 'Конвертер PDF у PNG',
-                'h1-title': 'Конвертер PDF у PNG',
-                'downloadAll': 'Завантажити все',
-                'downloadSelected': 'Завантажити обрані',
-                'label-pageInput': 'Виберіть сторінки для завантаження (розділіть комами, через тире):'
-                
-            },
-            // Добавьте другие языки здесь
-        };
-
-        // Автоматический выбор языка
-        var userLang = navigator.language || navigator.userLanguage;
-        var languageFirstTwo = userLang.substr(0,2); // Чтобы сохранить только первые 2 символа.
-
-        // Если язык пользователя не поддерживается, используйте английский как язык по умолчанию
-        if (!translations[languageFirstTwo]) {
-            languageFirstTwo = 'en';
-        }
-
-        // Замените текст на странице на выбранный язык
-        document.title = translations[languageFirstTwo]['title'];
-        document.getElementById('h1-title').innerText = translations[languageFirstTwo]['h1-title'];
-        document.getElementById('downloadAll').innerText = translations[languageFirstTwo]['downloadAll'];
-        document.getElementById('downloadSelected').innerText = translations[languageFirstTwo]['downloadSelected'];
-        document.getElementById('label-pageInput').innerText = translations[languageFirstTwo]['label-pageInput'];
-
-        // Проверка, выбран ли файл
-        document.getElementById('pdfInput').addEventListener('change', function() {
-            var isFileSelected = !!this.files.length;
-            document.getElementById('pdfCanvas').style.display = isFileSelected ? 'block' : 'none';
-            document.getElementById('pdfNavButtons').style.display = isFileSelected ? 'flex' : 'none';
-            document.getElementById('downloadAll').disabled = !isFileSelected;
-            document.getElementById('downloadSelected').disabled = !isFileSelected;
-            document.getElementById('pageSelection').style.display = isFileSelected ? 'block' : 'none';
-        });
-
-        // Скрыть элементы при загрузке страницы
-        window.onload = function() {
-            document.getElementById('pdfCanvas').style.display = 'none';
-            document.getElementById('pdfNavButtons').style.display = 'none';
-            document.getElementById('downloadAll').disabled = true;
-            document.getElementById('downloadSelected').disabled = true;
-            document.getElementById('pageSelection').style.display = 'none';
-        };
-    </script>
 </head>
 <body>
     <h1 id="h1-title">Конвертер PDF в PNG</h1>
     <div id="pdfContainer">
-        <div id="statusMessage"></div>
         <div id="pdfViewer">
             <canvas id="pdfCanvas"></canvas>
             <div id="pdfNavButtons" class="pdf-nav-button">
@@ -89,6 +24,7 @@
                 <input type="text" id="pageInput">
             </div>
         </div>
+        <div id="statusMessage"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
