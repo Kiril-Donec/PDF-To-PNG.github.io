@@ -1,17 +1,31 @@
-@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
+/* Общие стили для всех устройств */
 body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: center; /* Изменено на center для центрирования содержимого */
+    min-height: 100vh; /* Изменено на min-height для полноэкранного просмотра */
     overflow: auto; /* Изменено на auto для прокрутки при необходимости */
     animation: fadeIn 2s ease-in-out;
     background-color: #f0f0f0; /* Изменено цвет фона */
     transition: background-color 0.5s ease-in-out; /* Плавная анимация изменения фона */
+}
+
+@media (max-width: 600px) {
+    body {
+        align-items: flex-start; /* Изменено на flex-start для вертикального центрирования на маленьких экранах */
+        flex-direction: column; /* Изменено на column для вертикального центрирования на маленьких экранах */
+    }
+
+    #h1-title {
+        margin-top: 20px; /* Изменено для отступа названия сайта на маленьких экранах */
+    }
+
+    #pdfContainer {
+        margin-top: 20px; /* Изменено для отступа блока pdfContainer на маленьких экранах */
+    }
 }
 
 @keyframes fadeIn {
@@ -30,6 +44,32 @@ body {
     transform: scale(1.2);
 }
 
+/* Ripple effect для кнопок на мобильных устройствах */
+.pdf-nav-button.mobile {
+    position: relative;
+    overflow: hidden;
+}
+
+.pdf-nav-button.mobile::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+}
+
+.pdf-nav-button.mobile:hover::after {
+    width: 400%;
+    height: 400%;
+    opacity: 0;
+}
+
 #pdfContainer {
     display: flex;
     flex-direction: column;
@@ -38,10 +78,16 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-    animation: slideUp 2s ease-in-out;
+    animation: slideUp 2s ease-in-out, fadeIn 2s ease-in-out; /* Добавлены дополнительные анимации */
     width: 80%; /* Добавлено для адаптивности */
     max-width: 800px; /* Добавлено для адаптивности */
     transition: background-color 0.5s ease-in-out; /* Плавная анимация изменения фона */
+}
+
+@media (max-width: 600px) {
+    #pdfContainer {
+        width: 90%; /* Добавлено для адаптивности на мобильных устройствах */
+    }
 }
 
 @keyframes slideUp {
@@ -92,10 +138,10 @@ button {
     background-size: 200% 100%;
     color: white;
     cursor: pointer;
-    transition: background 0.5s ease-in-out, background-position 0.5s ease-in-out;
+    transition: transform 0.3s ease-in-out, background 0.5s ease-in-out, background-position 0.5s ease-in-out;
     max-width: 200px; /* Добавлено для адаптивности */
     width: auto; /* Добавлено для адаптивности */
-    animation: gradient 5s infinite;
+    animation: gradient 5s infinite, fadeIn 2s ease-in-out; /* Добавлены дополнительные анимации */
     animation-fill-mode: forwards;
 }
 
@@ -106,7 +152,7 @@ button {
 }
 
 button:hover {
-    animation: none;
+    transform: scale(1.05); /* Увеличение размера при наведении */
     background: linear-gradient(90deg, #00dfd8, #007cf0);
 }
 
@@ -149,12 +195,23 @@ input[type="file"]:hover {
     background: #e0e0e0;
 }
 
-/* Медиазапрос для экранов с шириной меньше 600px */
+/* Анимация при изменении размера окна браузера */
+@keyframes resizeAnimation {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Специфичные стили для мобильных устройств */
 @media (max-width: 600px) {
-    #pdfContainer {
-        width: 90%; /* Задайте ширину контейнера */
-        flex-direction: column; /* Измените направление элементов на вертикальное */
+    body {
+        align-items: center; /* Центрирование содержимого на мобильных устройствах */
     }
 
-    /* Другие стили для мобильных устройств */
+    #h1-title {
+        margin-top: 10px; /* Изменено для отступа названия сайта на маленьких экранах */
+    }
+
+    #pdfViewer {
+        width: 90%; /* Увеличение ширины просмотра на мобильных устройствах */
+    }
 }

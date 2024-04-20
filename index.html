@@ -2,10 +2,14 @@
 <html>
 <head>
     <title id="title">Конвертер PDF в PNG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="ico.gif" TYPE="image/gif" REL="icon">
 </head>
 <body>
-    <h1 id="h1-title">Конвертер PDF в PNG</h1>
+    <header id="siteHeader">
+        <h1 id="h1-title">Конвертер PDF в PNG</h1>
+    </header>
     <div id="pdfContainer">
         <div id="pdfViewer">
             <canvas id="pdfCanvas"></canvas>
@@ -21,7 +25,7 @@
             <button id="downloadSelected" disabled>Скачать выбранные</button>
             <div id="pageSelection">
                 <label id="label-pageInput" for="pageInput">Выберите страницы для загрузки (разделите запятыми, через тире):</label>
-                <input type="text" id="pageInput">
+                <input type="number" id="pageInput" name="pageInput">                
             </div>
         </div>
         <div id="statusMessage"></div>
@@ -29,5 +33,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        // JavaScript для определения типа устройства и добавления классов
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            // Если это мобильное устройство
+            document.body.classList.add('mobile');
+        } else {
+            // Если это десктоп
+            document.body.classList.add('desktop');
+        }
+    </script>
 </body>
 </html>
