@@ -1,3 +1,4 @@
+/* Стили для десктопных устройств */
 @import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
@@ -12,11 +13,6 @@ body {
     animation: fadeIn 2s ease-in-out;
     background-color: #f0f0f0; /* Изменено цвет фона */
     transition: background-color 0.5s ease-in-out; /* Плавная анимация изменения фона */
-}
-
-@keyframes fadeIn {
-    0% {opacity: 0;}
-    100% {opacity: 1;}
 }
 
 .pdf-nav-button {
@@ -42,11 +38,6 @@ body {
     width: 80%; /* Добавлено для адаптивности */
     max-width: 800px; /* Добавлено для адаптивности */
     transition: background-color 0.5s ease-in-out; /* Плавная анимация изменения фона */
-}
-
-@keyframes slideUp {
-    0% {transform: translateY(100%);}
-    100% {transform: translateY(0);}
 }
 
 #pdfViewer {
@@ -149,11 +140,19 @@ input[type="file"]:hover {
     background: #e0e0e0;
 }
 
-/* Медиазапрос для экранов с шириной меньше 600px */
+/* Стили для мобильных устройств */
 @media (max-width: 600px) {
+    body {
+        font-family: 'Arial', sans-serif; /* Изменение шрифта для мобильных устройств */
+        background-color: #fff; /* Изменение цвета фона для мобильных устройств */
+    }
+
+    .pdf-nav-button {
+        font-size: 18px; /* Уменьшение размера кнопок навигации для мобильных устройств */
+    }
+
     #pdfContainer {
-        width: 90%; /* Задайте ширину контейнера */
-        flex-direction: column; /* Измените направление элементов на вертикальное */
+        width: 100%; /* Задайте ширину контейнера на мобильных устройствах */
     }
 
     /* Другие стили для мобильных устройств */
