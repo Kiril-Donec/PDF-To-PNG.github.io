@@ -1,37 +1,33 @@
-# PDF-To-PNG.github.io
+# PDF в PNG Конвертер
 
-# PDF to PNG Converter
+Привет! Добро пожаловать в PDF в PNG Конвертер – удобный инструмент для быстрого преобразования файлов PDF в изображения формата PNG.
 
-Welcome to the PDF to PNG Converter – a convenient tool for quickly converting PDF files into PNG images.
+## Описание
 
-## Description
+PDF в PNG Конвертер – это простое в использовании веб-приложение, которое позволяет вам легко преобразовывать PDF файлы в PNG изображения. Независимо от того, нужно ли вам сконвертировать одну страницу или целый документ, наш конвертер справится с этой задачей быстро и эффективно.
 
-PDF to PNG Converter is a user-friendly web application that allows you to easily convert PDF files into PNG images. Whether you need to convert a single page or an entire document, our converter will handle the task quickly and efficiently.
+## Особенности
 
-## Features
+- **Простота в использовании:** Просто загрузите свой файл PDF, выберите необходимые параметры, и наш конвертер сделает все остальное.
+- **Выбор страниц:** Вы можете выбрать конкретные страницы для конвертации, что делает процесс более гибким.
+- **Множественные форматы:** Получите изображения в формате PNG, подходящие для широкого спектра применений.
+- **Быстрая конвертация:** Наше приложение обеспечивает быструю и эффективную конвертацию даже для больших файлов.
 
-- **Ease of Use:** Simply upload your PDF file, select the desired options, and our converter will take care of the rest.
-- **Page Selection:** You can choose specific pages to convert, making the process more flexible.
-- **Multiple Formats:** Get PNG images suitable for a wide range of applications.
-- **Fast Conversion:** Our application ensures fast and efficient conversion even for large files.
+## Использование
 
-## Usage
+1. **Загрузите файл PDF:** Нажмите на кнопку "Выбрать файл" и выберите файл PDF с вашего компьютера.
+2. **Выберите страницы (по желанию):** Если нужно, введите номера страниц, которые вы хотите сконвертировать.
+3. **Нажмите кнопку "Скачать все" или "Скачать выбранные":** Наш конвертер сделает остальное и предоставит вам PNG изображения в считанные секунды.
 
-1. **Upload PDF File:** Click the "Choose File" button and select a PDF file from your computer.
-2. **Select Pages (Optional):** If needed, enter the page numbers you want to convert.
-3. **Click "Download All" or "Download Selected":** Our converter will do the rest and provide you with PNG images in seconds.
+## Лицензия
 
-## License
+Этот проект лицензирован в соответствии с [лицензией MIT](LICENSE).
 
-This project is licensed under the terms of the [MIT License](LICENSE).
+## Содействие
 
-## Contribution
+Мы приветствуем вклады и предложения по улучшению этого проекта. Пожалуйста, ознакомьтесь с [руководством по содействию](CONTRIBUTING.md), если вы хотите внести свой вклад.
 
-We welcome contributions and suggestions for improving this project. Please read the [Contribution Guide](CONTRIBUTING.md) if you would like to contribute.
+## Контакты
 
-## Contact
+Если у вас есть какие-либо вопросы или предложения, пожалуйста, свяжитесь с нами по адресу [doneckiril58@gmail.com].
 
-If you have any questions or suggestions, please contact us at [doneckiril58@gmail.com].
-
-
-:)
