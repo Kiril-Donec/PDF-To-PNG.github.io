@@ -31,7 +31,7 @@ We welcome contributions and suggestions for improving this project. Please read
 
 ## Contact
 
-If you have any questions or suggestions, please contact us at [email@example.com].
+If you have any questions or suggestions, please contact us at [doneckiril58@gmail.com].
 
 
 :)
