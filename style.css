@@ -11,6 +11,8 @@ body {
     animation: fadeIn 2s ease-in-out;
     background-color: #f0f0f0; /* Изменено цвет фона */
     transition: background-color 0.5s ease-in-out; /* Плавная анимация изменения фона */
+    -webkit-tap-highlight-color: transparent; /* Добавлено свойство для предотвращения моментального изменения цвета при нажатии */
+    user-select: none; /* Отключение выделения текста при нажатии */
 }
 
 @media (max-width: 600px) {
@@ -25,12 +27,71 @@ body {
 
     #pdfContainer {
         margin-top: 20px; /* Изменено для отступа блока pdfContainer на маленьких экранах */
+        width: 90%; /* Уменьшение ширины pdfContainer на маленьких экранах */
+    }
+
+    #version {
+        font-size: 20px; /* Увеличение размера надписи версии на маленьких экранах */
+        text-align: center; /* Выравнивание по центру на маленьких экранах */
+        margin-top: 20px; /* Добавление отступа сверху на маленьких экранах */
+        display: block; /* Показывать версию на маленьких экранах */
+        position: static; /* Убрать позиционирование */
     }
 }
 
+/* Общие стили для версии на больших экранах */
+#version {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-size: 14px;
+    color: #666; /* Изменено на серый цвет */
+    display: none; /* По умолчанию скрывать версию */
+}
+
+@media (min-width: 600px) {
+    #version {
+        display: block; /* Показывать версию на больших экранах */
+    }
+}
+
+#githubLink {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #000; /* Черный цвет для текста кнопки */
+    font-size: 14px;
+    transition: transform 0.3s ease-in-out;
+    top: calc(655px); /* Добавлен небольшой отступ сверху по умолчанию */
+
+    /* Отступ сверху на маленьких экранах */
+    @media (max-width: 600px) {
+        top: calc(640px); /* Увеличенный отступ для маленьких экранов */
+    }
+}
+
+
+#githubIcon {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
+
+#githubText {
+    font-weight: bold;
+}
+
+#githubLink:hover {
+    transform: scale(1.05); /* Увеличение размера при наведении */
+    color: #666; /* Изменение цвета текста при наведении */
+}
+
 @keyframes fadeIn {
-    0% {opacity: 0;}
-    100% {opacity: 1;}
+     0% {opacity: 0;}
+     100% {opacity: 1;}
 }
 
 .pdf-nav-button {
@@ -44,32 +105,6 @@ body {
     transform: scale(1.2);
 }
 
-/* Ripple effect для кнопок на мобильных устройствах */
-.pdf-nav-button.mobile {
-    position: relative;
-    overflow: hidden;
-}
-
-.pdf-nav-button.mobile::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 200%;
-    height: 200%;
-    background-color: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
-    transform: translate(-50%, -50%) scale(0);
-    pointer-events: none;
-}
-
-.pdf-nav-button.mobile:hover::after {
-    width: 400%;
-    height: 400%;
-    opacity: 0;
-}
-
 #pdfContainer {
     display: flex;
     flex-direction: column;
@@ -78,10 +113,12 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-    animation: slideUp 2s ease-in-out, fadeIn 2s ease-in-out; /* Добавлены дополнительные анимации */
+    animation: slideUp 2s ease-in-out;
     width: 80%; /* Добавлено для адаптивности */
     max-width: 800px; /* Добавлено для адаптивности */
     transition: background-color 0.5s ease-in-out; /* Плавная анимация изменения фона */
+    overflow-x: hidden; /* Скрытие горизонтальной прокрутки */
+    overflow-y: auto; /* Включение вертикальной прокрутки при необходимости */
 }
 
 @media (max-width: 600px) {
@@ -101,6 +138,18 @@ body {
     align-items: center;
     position: relative;
     width: 100%; /* Добавлено для адаптивности */
+    max-width: 100%; /* Добавлено для адаптивности */
+    overflow: hidden; /* Скрытие горизонтальной прокрутки */
+}
+
+@media (max-width: 600px) {
+    #pdfViewer {
+        max-width: calc(100% - 40px); /* Уменьшение максимальной ширины на мобильных устройствах */
+    }
+}
+
+#pdfViewer canvas {
+    max-width: 100%; /* Добавлено ограничение максимальной ширины для canvas */
 }
 
 #pdfControls {
@@ -211,7 +260,17 @@ input[type="file"]:hover {
         margin-top: 10px; /* Изменено для отступа названия сайта на маленьких экранах */
     }
 
-    #pdfViewer {
-        width: 90%; /* Увеличение ширины просмотра на мобильных устройствах */
+    #pdfContainer {
+        margin-top: 20px; /* Изменено для отступа блока pdfContainer на маленьких экранах */
+        width: 90%; /* Увеличение ширины pdfContainer на мобильных устройствах */
+    }
+
+    #githubLink {
+        bottom: 50px; /* Изменено положение кнопки GitHub на мобильных устройствах */
+    }
+
+    #version {
+        display: block; /* Показывать версию на маленьких экранах */
     }
 }
+ 
